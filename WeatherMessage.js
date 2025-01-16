@@ -3,14 +3,23 @@
 const data = {
     weather: ["sunny", "cloudy", "rainy"],
     activities: {
-        sunnyActivity: ["swimming", "biking", "hiking"],
-        cloudyActivity: ["reading", "walking", "garden"],
-        rainyActivity: ["painting", "biking", "walking"]
+        sunnyActivity: ["swimming", "biking", "hiking", "kayaking"],
+        cloudyActivity: {
+            indoor: ["reading", "watching a movie", "playing video games"],
+            outdoor: ["walking", "hiking", "biking"]
+        },
+        rainyActivity: {
+            indoor: ["watching a movie", "playing video games"],
+            outdoor: ["walking", "hiking", "biking"]
+        }
     },
     clothes: {
         sunnyClothes: ["t-shirt", "shorts", "sunglasses"],
-        cloudyClothes: ["jacket", "pants", "hat"],
-        rainyClothes: ["raincoat", "umbrella", "hat"]
+        cloudyClothes: ["t-shirt", "pants", "hat"],
+        rainyClothes: {
+            indoor: ["pajamas", "socks", "beanie"],
+            outdoor: ["raincoat", "pants", "hat"]
+        }
     }
 };
 
@@ -22,17 +31,30 @@ function generateMessage() {
     const weather = data.weather[generateRand(data.weather)];
     let activity;
     let clothes;
+
     if (weather === "sunny") {
         activity = data.activities.sunnyActivity[generateRand(data.activities.sunnyActivity)];
         clothes = data.clothes.sunnyClothes[generateRand(data.clothes.sunnyClothes)];
     } else if (weather === "cloudy") {
-        activity = data.activities.cloudyActivity[generateRand(data.activities.cloudyActivity)];
-        clothes = data.clothes.cloudyClothes[generateRand(data.clothes.cloudyClothes)];
-    } else if (weather === "rainy") {
-        activity = data.activities.rainyActivity[generateRand(data.activities.rainyActivity)];
-        clothes = data.clothes.rainyClothes[generateRand(data.clothes.rainyClothes)];
+        const indoorOrOutdoor = generateRand([0, 1]);
+        if (indoorOrOutdoor === 0) {
+            activity = data.activities.cloudyActivity.indoor[generateRand(data.activities.cloudyActivity.indoor)];
+            clothes = data.clothes.cloudyClothes[generateRand(data.clothes.cloudyClothes)];
+        } else {
+            activity = data.activities.cloudyActivity.outdoor[generateRand(data.activities.cloudyActivity.outdoor)];
+            clothes = data.clothes.cloudyClothes[generateRand(data.clothes.cloudyClothes)];
+        }
+    } else {
+        const indoorOrOutdoor = generateRand([0, 1]);
+        if (indoorOrOutdoor === 0) {
+            activity = data.activities.rainyActivity.indoor[generateRand(data.activities.rainyActivity.indoor)];
+            clothes = data.clothes.rainyClothes.indoor[generateRand(data.clothes.rainyClothes.indoor)];
+        } else {
+            activity = data.activities.rainyActivity.outdoor[generateRand(data.activities.rainyActivity.outdoor)];
+            clothes = data.clothes.rainyClothes.outdoor[generateRand(data.clothes.rainyClothes.outdoor)];
+        }
     }
-    const message = `It's ${weather} today. I recommend ${activity} and you should bring your ${clothes}.`;
+    const message = `It's ${weather} today. I recommend ${activity} and don't forget your ${clothes}!`;
     
     return message;
 };
